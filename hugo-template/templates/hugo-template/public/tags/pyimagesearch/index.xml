@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Pyimagesearch on Matias Pan</title>
+    <link>/tags/pyimagesearch/</link>
+    <description>Recent content in Pyimagesearch on Matias Pan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 19 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/pyimagesearch/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Tracking color objects with GoCV</title>
+      <link>/posts/box-tracking-with-gocv/</link>
+      <pubDate>Fri, 19 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/box-tracking-with-gocv/</guid>
+      <description>Disclaimer: this blog post is just a port of Adrian&amp;rsquo;s tutorial at pyimagesearch where he shows how to track a ball using Python and OpenCV. I only changed a few things here and there and rewrote it using Go and GoCV. So all the credit should go to him
+I always prefer to start by showing what you&amp;rsquo;ll get if you stick to the end, so here it goes:</description>
+    </item>
+    
+  </channel>
+</rss>

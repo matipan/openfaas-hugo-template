@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Iot on Matias Pan</title>
+    <link>/tags/iot/</link>
+    <description>Recent content in Iot on Matias Pan</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 18 Oct 2018 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/iot/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Motion tracking turret with Gobot and GoCV - Part 1</title>
+      <link>/posts/motion-tracking-turret-with-gobot-and-gocv/</link>
+      <pubDate>Thu, 18 Oct 2018 00:00:00 +0000</pubDate>
+      
+      <guid>/posts/motion-tracking-turret-with-gobot-and-gocv/</guid>
+      <description>The title says it, motion tracking turret using only Go, ready to have some func?
+This blog post will be divided into three main parts: Motion detection with GoCV, Controlling servo motors with Gobot and Putting it all together. In the first part, we build a lightweight motion detection algorithm that can run on low-power devices such as the RPi. In the second part we will show how to control servo motors with Gobot from the Raspberry Pi and in the last part we&amp;rsquo;ll explain how to go from detecting an object on an image to telling exactly the angles in which the servos need to move in order to track it.</description>
+    </item>
+    
+  </channel>
+</rss>
