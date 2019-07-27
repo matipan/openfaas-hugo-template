@@ -1,2 +1,2 @@
 language: hugo
-fprocess: ./handler
+# fprocess: ./handler

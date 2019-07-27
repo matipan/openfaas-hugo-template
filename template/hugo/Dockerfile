@@ -1,43 +1,24 @@
-FROM matipan/gocv-alpine:4.0.1-buildstage as build-stage
+FROM alpine:3.7
 
-# Add the watchdog
-RUN apk upgrade --no-cache && apk --no-cache add curl \ 
-    && echo "Pulling watchdog binary from Github." \
-    && curl -sSL https://github.com/openfaas/faas/releases/download/0.8.10/fwatchdog > /usr/bin/fwatchdog \
-    && chmod +x /usr/bin/fwatchdog \
-    && apk del curl --no-cache
+RUN apk update && apk add py-pygments ca-certificates bash git && rm -rf /var/cache/apk/*
 
-WORKDIR /go/src/handler
-COPY . .
+ENV HUGO_VERSION 0.55.0
+ENV HUGO_BINARY hugo_${HUGO_VERSION}_Linux-64bit
+ENV HUGO_ENV=production
 
-RUN go build -o handler .
+RUN mkdir /usr/local/hugo
+ADD https://github.com/spf13/hugo/releases/download/v${HUGO_VERSION}/${HUGO_BINARY}.tar.gz /usr/local/hugo/
+RUN tar xzf /usr/local/hugo/${HUGO_BINARY}.tar.gz -C /usr/local/hugo/ \
+	&& ln -s /usr/local/hugo/hugo /usr/local/bin/hugo \
+	&& rm /usr/local/hugo/${HUGO_BINARY}.tar.gz
 
-FROM matipan/gocv-alpine:4.0.1-runtime
+RUN addgroup -S web && adduser -S -g web web
+RUN mkdir -p /home/web
+RUN chown web /home/web
 
-RUN echo -e '@edgunity http://nl.alpinelinux.org/alpine/edge/community\n\
-@edge http://nl.alpinelinux.org/alpine/edge/main\n\
-@testing http://nl.alpinelinux.org/alpine/edge/testing\n\
-@community http://dl-cdn.alpinelinux.org/alpine/edge/community'\
-  >> /etc/apk/repositories
+WORKDIR /home/web
+COPY ./function .
 
-RUN apk --no-cache add ca-certificates
-# libstdc++ libjpeg libtbb@testing libpng jasper-libs tiff openblas libwebp
+EXPOSE 8080
 
-# Add non root user
-RUN addgroup -S app && adduser -S -g app app
-RUN mkdir -p /home/app
-RUN chown app /home/app
-
-WORKDIR /home/app
-COPY --from=build-stage /go/src/handler/cascades   ./cascades
-COPY --from=build-stage /go/src/handler/models   ./models
-COPY --from=build-stage /go/src/handler/handler    .
-COPY --from=build-stage /usr/bin/fwatchdog         .
-
-RUN chown -R app ./cascades
-
-USER app
-
-ENV fprocess="./handler"
-
-CMD ["./fwatchdog"]
+ENTRYPOINT ["hugo", "server", "--minify", "-p", "8080", "--bind", "0.0.0.0", "--log"]
