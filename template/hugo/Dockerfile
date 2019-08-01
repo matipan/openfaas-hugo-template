@@ -21,7 +21,7 @@ FROM matipan/static-server:0.0.1 AS runtime
 
 WORKDIR /home/server
 
-COPY --from=build /home/app/public .
+COPY --from=build /home/app/public public
 
 ENV PUBLISH="public"
 ENV PORT=8080
