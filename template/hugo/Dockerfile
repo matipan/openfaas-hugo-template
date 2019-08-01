@@ -21,4 +21,4 @@ COPY ./function .
 
 EXPOSE 8080
 
-ENTRYPOINT ["hugo", "server", "--minify", "-p", "8080", "--bind", "0.0.0.0", "--log"]
+ENTRYPOINT ["hugo", "server", "--disableLiveReload", "-e", "production", "--minify", "-p", "8080", "--bind", "0.0.0.0", "--log"]
