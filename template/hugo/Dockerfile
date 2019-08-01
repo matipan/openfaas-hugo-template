@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.10 AS build
 
 RUN apk update && apk add py-pygments ca-certificates bash git && rm -rf /var/cache/apk/*
 
@@ -12,13 +12,18 @@ RUN tar xzf /usr/local/hugo/${HUGO_BINARY}.tar.gz -C /usr/local/hugo/ \
 	&& ln -s /usr/local/hugo/hugo /usr/local/bin/hugo \
 	&& rm /usr/local/hugo/${HUGO_BINARY}.tar.gz
 
-RUN addgroup -S web && adduser -S -g web web
-RUN mkdir -p /home/web
-RUN chown web /home/web
-
-WORKDIR /home/web
+WORKDIR /home/app
 COPY ./function .
 
-EXPOSE 8080
+RUN ["hugo", "--gc", "--minify"]
 
-ENTRYPOINT ["hugo", "server", "--disableLiveReload", "-e", "production", "--minify", "-p", "8080", "--bind", "0.0.0.0", "--log"]
+FROM matipan/static-server:0.0.1 AS runtime
+
+WORKDIR /home/server
+
+COPY --from=build /home/app/public .
+
+ENV PUBLISH="public"
+ENV PORT=8080
+
+# The entrypoint is inheritated from the static server image
