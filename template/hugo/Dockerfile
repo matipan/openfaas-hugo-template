@@ -17,7 +17,7 @@ COPY ./function .
 
 RUN ["hugo", "--gc", "--minify"]
 
-FROM matipan/static-server:0.0.1 AS runtime
+FROM matipan/static-server:0.1.0 AS runtime
 
 WORKDIR /home/server
 
