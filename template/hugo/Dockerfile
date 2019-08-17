@@ -1,4 +1,8 @@
+FROM openfaas/of-watchdog:0.5.5 AS watchdog
 FROM alpine:3.10 AS build
+
+COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
+RUN chmod +x /usr/bin/fwatchdog
 
 RUN apk update && apk add py-pygments ca-certificates bash git && rm -rf /var/cache/apk/*
 
@@ -17,13 +21,16 @@ COPY ./function .
 
 RUN ["hugo", "--gc", "--minify"]
 
-FROM matipan/static-server:0.1.0 AS runtime
+FROM alpine:3.10 AS runtime
 
-WORKDIR /home/server
+WORKDIR /home/app
 
 COPY --from=build /home/app/public public
+COPY --from=build /usr/bin/fwatchdog .
 
-ENV PUBLISH="public"
-ENV PORT=8080
+ENV mode="static"
+ENV static_path="/home/app/public"
 
-# The entrypoint is inheritated from the static server image
+HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
+
+CMD ["./fwatchdog"]
